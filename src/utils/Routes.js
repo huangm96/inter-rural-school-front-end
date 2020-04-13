@@ -3,7 +3,6 @@ import { Route, Redirect } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 import Login from "../Components/Login";
-import Header from "../Components/Header";
 import Register from "../Components/Register/Register";
 import PersonalInfo from "../Components/Register/PersonalInfo";
 
@@ -13,10 +12,8 @@ import Dashboard from "../Components/dashboard/dashboard.component";
 const Routes = () => {
   return (
     <div>
-      <Route exact path="/home" render={() => <Redirect to="/" />} />
       <Route exact path="/" render={() => <Redirect to="/login" />} />
       <Route exact path="/login" component={Login} />
-      <Route path="/" component={Header} />
       <Route exact path="/new_user" component={Register} />
       <Route
         exact
