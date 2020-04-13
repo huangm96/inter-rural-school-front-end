@@ -7,17 +7,23 @@ import {
   LOGIN_FAILURE,
   GET_SCHOOLS_START,
   GET_SCHOOLS_SUCCESS,
-  GET_SCHOOLS_FAILURE, 
+  GET_SCHOOLS_FAILURE,
   SAVE_ISSUE,
-  FETCHING_ISSUES_START,
-  FETCHING_ISSUES_SUCCESS,
-  FETCHING_ISSUES_FAILURE,
+  FETCHING_ALLISSUES_START,
+  FETCHING_ALLISSUES_SUCCESS,
+  FETCHING_ALLISSUES_FAILURE,
+  FETCHING_ISSUESBYSCHOOLID_START,
+  FETCHING_ISSUESBYSCHOOLID_SUCCESS,
+  FETCHING_ISSUESBYSCHOOLID_FAILURE,
+  FETCHING_COMMENTBYID_START,
+  FETCHING_COMMENTBYID_SUCCESS,
+  FETCHING_COMMENTBYID_FAILURE,
+  SAVING_COMMENTS_START,
+  SAVING_COMMENTS_SUCCESS,
   FETCHING_COMMENTS_START,
   FETCHING_COMMENTS_SUCCESS,
+  FETCHING_COMMENTS_FAILURE,
   //FETCHING_COMMENTS_FAILURE,
-  SAVING_COMMENTS_START,
-SAVING_COMMENTS_SUCCESS,
-//SAVING_COMMENTS_FAILURE,
 } from "../actions";
 
 export const initialState = {
@@ -29,7 +35,8 @@ export const initialState = {
   getErrorMessageRegister: false,
   userInfo: {},
   issues: [],
-  comments: [],
+  comments: {},
+  commentsList:[],
   schools:[]
 };
 
@@ -88,39 +95,65 @@ function rootReducer(state = initialState, action) {
     case GET_SCHOOLS_SUCCESS:
       return {
         ...state,
-        isFetching:false,
-        schools:action.payload
+        isFetching: false,
+        schools: action.payload,
       };
     case GET_SCHOOLS_FAILURE:
       return {
         ...state,
-        isFetching:false
+        isFetching: false,
       };
     case SAVE_ISSUE:
       return {
         ...state,
         issues: [...state.issues, action.payload],
       };
-    case FETCHING_ISSUES_START:
-      return {
-        ...state,
-        isFetching: true
-      };
-    case FETCHING_ISSUES_SUCCESS:
-      return {
-        ...state,
-        issues: action.payload,
-        isFetching: false
-      };
-    case FETCHING_COMMENTS_START:
+    case FETCHING_ALLISSUES_START:
       return {
         ...state,
         isFetching: true,
       };
-    case FETCHING_COMMENTS_SUCCESS:
+    case FETCHING_ALLISSUES_SUCCESS:
       return {
         ...state,
-        comments: [...state.comments, action.payload],
+        issues: action.payload,
+        isFetching: false,
+      };
+    case FETCHING_ALLISSUES_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case FETCHING_ISSUESBYSCHOOLID_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case FETCHING_ISSUESBYSCHOOLID_SUCCESS:
+      return {
+        ...state,
+        issues: action.payload,
+        isFetching: false,
+      };
+    case FETCHING_ISSUESBYSCHOOLID_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case FETCHING_COMMENTBYID_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case FETCHING_COMMENTBYID_SUCCESS:
+      return {
+        ...state,
+        comments: action.payload,
+        isFetching: false,
+      };
+    case FETCHING_COMMENTBYID_FAILURE:
+      return {
+        ...state,
         isFetching: false,
       };
     case SAVING_COMMENTS_START:
@@ -132,6 +165,22 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         comments: [...state.comments, action.payload],
+      };
+    case FETCHING_COMMENTS_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case FETCHING_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        commentsList: action.payload,
+        isFetching: false,
+      };
+    case FETCHING_COMMENTS_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
       };
     default:
       return state;

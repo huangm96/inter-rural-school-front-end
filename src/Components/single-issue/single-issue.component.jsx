@@ -2,10 +2,8 @@ import React   from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { connect } from 'react-redux'
-import { updateForm } from "../../store/actions";
-import moment from "moment"
-
-import { formatDate } from '../../utils/utils'
+import { updateForm,getCommentById } from "../../store/actions";
+import { useEffect } from "react";
 
 import SingleIssueForm from './singleissue-form.component'
 
@@ -21,12 +19,7 @@ function SingleIssue( props ) {
   const updateIssues = props.updateIssues;
   let showSingle = (props.winWidth >= 1200 || props.issueType !== 'clear')? { display: 'flex' } : { display : 'none'} ;
   // destructuring user data
-  let { 
-    first_name ,
-    last_name,
-    school,
-    isBoardMember,
-  } = props.userData;
+  console.log(props.issue)
 
   // destructuring user issue data
   let {
@@ -34,45 +27,64 @@ function SingleIssue( props ) {
     status,
     issue_title,
     issue_description,
-    date
+    date,
+    createdBy,
+    school_name,
+    school_id,
+    comment_id,
+    location,
+    isBoardMember,
   } = props.issue;
 
-  let userName = ( first_name && last_name)? `${first_name.replace(/^[a-z]/, match=> match.toUpperCase())} ${last_name.replace(/^[a-z]/, match=> match.toUpperCase())}`: '';
   // inital values for new issues
-  let InitNewIssue ={
-    // create random number new issues
-      id: Math.floor(Math.random()*10000),
-      status: 'Needs Attention',
-      createdBy: userName,
-      description:  '',
-      title:  '',
-  } 
+  let InitNewIssue = {
+    id: null,
+    status: "Needs Attention",
+    createdBy: localStorage.getItem("userName"),
+    description: "",
+    date: new Date(),
+    title: "",
+    school_id: localStorage.getItem("school_id"),
+    comment_id: "",
+    BMcomment:""
+  }; 
  
   //initial values for existing issues 
   let InitEdit = {
-        id: id,
-        status : status,
-        createdBy: userName,
-        date: moment(date).format('L'),
-        description:  issue_description,
-        title:  issue_title
-  }
+    id: id,
+    status: status,
+    createdBy: createdBy,
+    date: date,
+    issue_description: issue_description,
+    issue_title: issue_title,
+    school_id: localStorage.getItem("school_id"),
+    comment_id: comment_id,
+    BMcomment:props.BMcomment.comment
+  };
 
   let initObject = ( issueType === 'edit' ) ? InitEdit : InitNewIssue;
 
   // console.log( 'single-issue props.issue: ', props.issue);
-  // console.log( 'single-issue props.userData: ',props.userData);
   // console.log('issueType prop of singleIssue:', props.issueType);
-
+//  useEffect(() => {
+   
+//  }, []);
+  console.log(props.commentsList)
   return (
     // hide the single issue view on mobile until user clicks view or edit button
-    <div 
-      className={styles["singleIssue--container"]}
-      style={ showSingle }
-      >
+    <div className={styles["singleIssue--container"]} style={showSingle}>
       <div className={styles["singleIssue--header"]}>
-        {showForm && props.issueType === 'edit' && <p>ID: {props.issue.id}</p>}
-        {showForm && props.issueType === 'createnew' && <p>Create New Issue</p>}
+        {showForm && props.issueType === "edit" && (
+          <div>
+            <span> ID: {id}</span>
+            <span style={{ marginLeft: 50 }}>
+              School: {school_name} Location: {location}
+            </span>
+          </div>
+        )}
+        {showForm && props.issueType === "createnew" && (
+          <span> Create New Issue School</span>
+        )}
         {/* Message which shows when page first renders, user click 'close',  
     or submits the form, or deletes an issue */}
         {!showForm && (
@@ -85,21 +97,20 @@ function SingleIssue( props ) {
       {showForm && (
         <Formik
           enableReinitialize
-          initialValues={{ ...initObject, props}}
-
-          onSubmit={(values, { resetForm, setSubmitting  }) => {
+          initialValues={{ ...initObject, props }}
+          onSubmit={(values, { resetForm, setSubmitting }) => {
             resetForm();
           }}
-
           validationSchema={yup.object().shape({
-            title: yup.string().required("Please provide a title"),
-            description: yup.string().required("Please provide decription")
+            issue_title: yup.string().required("Please provide a title"),
+            issue_description: yup
+              .string()
+              .required("Please provide decription"),
+            BMcomment: yup.string().required("Please provide comment"),
           })}
-
-          render={props => (
+          render={(props) => (
             <SingleIssueForm
               {...props}
-              isBM={isBoardMember}
               issueType={issueType}
               Set_IssueType={SIT}
               updateIssues={updateIssues}
@@ -114,11 +125,13 @@ function SingleIssue( props ) {
 const mapStateToProps = state => {
   //console.log(state);
   return {
-    getErrorMessage: state.getErrorMessage
+    getErrorMessage: state.getErrorMessage,
+    BMcomment: state.comments,
+    commentsList :state.commentsList
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updateForm }
+  { updateForm,getCommentById }
 )(SingleIssue);
