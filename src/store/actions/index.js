@@ -76,24 +76,22 @@ export const saveIssue = (info, props) => dispatch => {
     });
 };
 
-// export const FETCHING_ISSUES_START = "FETCHING_ISSUES_START";
-// export const FETCHING_ISSUES_SUCCESS = "FETCHING_ISSUES_SUCCESS";
-// export const FETCHING_ISSUES_FAILURE = "FETCHING_ISSUES_FAILURE";
+export const FETCHING_ISSUES_START = "FETCHING_ISSUES_START";
+export const FETCHING_ISSUES_SUCCESS = "FETCHING_ISSUES_SUCCESS";
+export const FETCHING_ISSUES_FAILURE = "FETCHING_ISSUES_FAILURE";
 
-// export const getIssueList = () => dispatch => {
-//   dispatch({ type: FETCHING_ISSUES_START });
-//   axios
-//     .get('https://internationalrsr.herokuapp.com/issues/')
-//     .then(res => {
-//       console.log('issues  from server :',res);
-//       res.data.forEach(data => {
-//         dispatch({ type: FETCHING_ISSUES_SUCCESS, payload: data });
-//       });
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// };
+export const getIssueList = () => dispatch => {
+  dispatch({ type: FETCHING_ISSUES_START });
+  axiosWithAuth()
+    .get("/issues")
+    .then((res) => {
+      dispatch({ type: FETCHING_ISSUES_SUCCESS, payload: res.data });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({ type: FETCHING_ISSUES_FAILURE });
+    });
+};
 
 export const FETCHING_COMMENTS_START = "FETCHING_COMMENTS_START";
 export const FETCHING_COMMENTS_SUCCESS = "FETCHING_COMMENTS_SUCCESS";

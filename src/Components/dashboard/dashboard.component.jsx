@@ -7,31 +7,23 @@ import DashBoardMenu from '../dashboard-menu/dashboard-menu.component';
 import SingleIssue from '../single-issue/single-issue.component';
 import IssueList from '../IssueList/IssueList';
 import { GetWindowSize } from '../../utils/window_size_hook'
-import {  getCommentList } from '../../store/actions';
+import { getIssueList, getCommentList } from "../../store/actions";
 
 function Dashboard(props) {
   const [currentIssue, setCurrentIssue ] = useState({})
   const [ issueType, setIssueType ] = useState('clear');
   const [query, setQuery] = useState('');
-  const [issuesList, setIssuesList] = useState([]);
+  // const [issuesList, setIssuesList] = useState([]);
   const [newIssues, setNewIssues] = useState({});
 
   // interactions with Redux Store
   
-  const { getCommentList } = props
+  const { getCommentList,getIssueList,issuesList } = props
 
   
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      axios
-        .get("https://internationalrsr.herokuapp.com/issues/")
-        .then(res => {
-          console.log("get IssueList action",res.data);
-          setIssuesList(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      getIssueList()
     }
   }, [newIssues]);
 // fetch data from Redux Store
@@ -108,10 +100,11 @@ const mapStateToProps = state => {
   return {
     userInfo: state.userInfo,
     comments: state.comments,
-    isFetching: state.isFetching
+    isFetching: state.isFetching,
+    issuesList: state.issues,
   };
 };
 export default connect(
   mapStateToProps,
-  {   getCommentList }
+  {   getCommentList,getIssueList }
 )(Dashboard);

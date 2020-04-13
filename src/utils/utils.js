@@ -1,5 +1,5 @@
 import "antd/dist/antd.css";
-import { Modal, Button } from "antd";
+import { Modal,  } from "antd";
 
 export function formatDate() {
   var d = new Date(),
@@ -96,7 +96,7 @@ export function addCommentsToIssues( issues, comments ){
      let match = {};
     //loop over  comments
      comments.forEach( comment => {
-       if((issue.issue_title == comment.issue_title) &&  (issue.issue_description == comment.issue_description)) { match['comment']=  comment.comment }}) 
+       if((issue.issue_title === comment.issue_title) &&  (issue.issue_description === comment.issue_description)) { match['comment']=  comment.comment }}) 
       console.log('match', match)
       /* if  issue.issue_title === comment.issue_title &&  issue.issue_des === comment.issue_des 
         insert comment into issue. 
