@@ -47,10 +47,7 @@ const BlueBtn = styled(Button)`
   }
 `;
 
-const Greeting = styled.p`
-    margin: 0 auto;
-    font-size: 1.25rem;
-`;
+
 
 const BigTitle = styled.h1`
     display: none;
@@ -60,27 +57,28 @@ const BigTitle = styled.h1`
 `;
 const Header = (props) => {
   const { userInfo } = props
-  const [showGreeting, setShowGreeting] = useState(false)
+  const [showButton, setShowButton] = useState(false)
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      setShowGreeting(true)
+      
+      setShowButton(true)
     }
   }, [userInfo]);
-  console.log(userInfo)
   return (
     <Div className="HeaderContainer">
       <img src="/images/logo.png" alt="logo" width="50px" />
       <BigTitle>International Rural School</BigTitle>
-      {showGreeting ? (
+      {showButton ? (
         <Info>
-          <Greeting>Hi! {userInfo.first_name}</Greeting>
-
+          <p>{localStorage.getItem("userType")}</p>
           <Link
             to="/"
             onClick={() => {
               localStorage.removeItem("token");
-              localStorage.removeItem("userName")
-              setShowGreeting(false);
+              localStorage.removeItem("userType");
+              localStorage.removeItem("school_id");
+              localStorage.removeItem("userName");
+              setShowButton(false);
             }}
           >
             <BlueBtn>Log Out</BlueBtn>

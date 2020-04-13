@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import LayoutWrapper from '../layout/layout.component';
 import { connect } from 'react-redux';
 import styles from './dashboard.module.less';
-import axios from "axios";
 import DashBoardMenu from '../dashboard-menu/dashboard-menu.component';
 import SingleIssue from '../single-issue/single-issue.component';
 import IssueList from '../IssueList/IssueList';
 import { GetWindowSize } from '../../utils/window_size_hook'
-import { getIssueList, getCommentList } from "../../store/actions";
+import {
+  getAllIssueList,
+  getIssuesBySchoolId,
+  getCommentList,
+} from "../../store/actions";
 
 function Dashboard(props) {
   const [currentIssue, setCurrentIssue ] = useState({})
@@ -18,19 +21,23 @@ function Dashboard(props) {
 
   // interactions with Redux Store
   
-  const { getCommentList,getIssueList,issuesList } = props
+  const {
+    getCommentList,
+    getAllIssueList,
+    issuesList,
+    getIssuesBySchoolId,
+  } = props;
 
   
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      getIssueList()
+    if (localStorage.getItem("userType")==="Board Member") {
+      getAllIssueList()
+    } else {
+      getIssuesBySchoolId(localStorage.getItem("school_id"));
     }
   }, [newIssues]);
-// fetch data from Redux Store
   useEffect(() => {
-    
-      getCommentList();
-    
+    getCommentList();
   }, []);
 
   function Set_IssueType( type ){
@@ -104,7 +111,8 @@ const mapStateToProps = state => {
     issuesList: state.issues,
   };
 };
-export default connect(
-  mapStateToProps,
-  {   getCommentList,getIssueList }
-)(Dashboard);
+export default connect(mapStateToProps, {
+  getAllIssueList,
+  getIssuesBySchoolId,
+  getCommentList,
+})(Dashboard);

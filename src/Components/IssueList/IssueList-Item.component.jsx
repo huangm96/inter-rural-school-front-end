@@ -8,7 +8,7 @@ import moment from "moment";
 
 function IssuesListItem(props) {
   let iconType = "";
-  console.log('issuelistitem', props)
+  // console.log('issuelistitem', props)
   // set the correct status icon
   switch (props.data.status) {
     case "Needs Attention":
