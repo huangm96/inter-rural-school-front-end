@@ -7,7 +7,7 @@ import Routes from "./utils/Routes";
 function App() {
   return (
     <div className="App">
-      {/* <Header /> */}
+      <Header />
       <Routes />
     </div>
   );

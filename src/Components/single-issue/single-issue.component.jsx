@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import { connect } from 'react-redux'
 import { updateForm } from "../../store/actions";
-
+import moment from "moment"
 
 import { formatDate } from '../../utils/utils'
 
@@ -44,7 +44,6 @@ function SingleIssue( props ) {
       id: Math.floor(Math.random()*10000),
       status: 'Needs Attention',
       createdBy: userName,
-      date: formatDate(), 
       description:  '',
       title:  '',
   } 
@@ -54,7 +53,7 @@ function SingleIssue( props ) {
         id: id,
         status : status,
         createdBy: userName,
-        date: date,
+        date: moment(date).format('L'),
         description:  issue_description,
         title:  issue_title
   }

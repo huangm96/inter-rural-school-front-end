@@ -9,9 +9,9 @@ import {
   GET_SCHOOLS_SUCCESS,
   GET_SCHOOLS_FAILURE, 
   SAVE_ISSUE,
-  // FETCHING_ISSUES_START,
-  // FETCHING_ISSUES_SUCCESS,
-  // FETCHING_ISSUES_FAILURE,
+  FETCHING_ISSUES_START,
+  FETCHING_ISSUES_SUCCESS,
+  FETCHING_ISSUES_FAILURE,
   FETCHING_COMMENTS_START,
   FETCHING_COMMENTS_SUCCESS,
   //FETCHING_COMMENTS_FAILURE,
@@ -71,8 +71,7 @@ function rootReducer(state = initialState, action) {
 
           isBoardMember: action.payload.isBoardMember,
           last_name: action.payload.last_name,
-          school: "Country School",
-          school_id: 10,
+          school_id: action.payload.school_id,
         },
         loginIsLoading: false,
       };
@@ -102,17 +101,17 @@ function rootReducer(state = initialState, action) {
         ...state,
         issues: [...state.issues, action.payload],
       };
-    // case FETCHING_ISSUES_START:
-    //   return {
-    //     ...state,
-    //     isFetching: true
-    //   };
-    // case FETCHING_ISSUES_SUCCESS:
-    //   return {
-    //     ...state,
-    //     issues: [...state.issues, action.payload],
-    //     isFetching: false
-    //   };
+    case FETCHING_ISSUES_START:
+      return {
+        ...state,
+        isFetching: true
+      };
+    case FETCHING_ISSUES_SUCCESS:
+      return {
+        ...state,
+        issues: action.payload,
+        isFetching: false
+      };
     case FETCHING_COMMENTS_START:
       return {
         ...state,

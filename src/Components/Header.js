@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import styled from "styled-components";
@@ -59,28 +59,36 @@ const BigTitle = styled.h1`
 }
 `;
 const Header = (props) => {
-  
-
+  const { userInfo } = props
+  const [showGreeting, setShowGreeting] = useState(false)
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setShowGreeting(true)
+    }
+  }, [userInfo]);
+  console.log(userInfo)
   return (
     <Div className="HeaderContainer">
       <img src="/images/logo.png" alt="logo" width="50px" />
       <BigTitle>International Rural School</BigTitle>
-     { localStorage.getItem("token") ?(
-      <Info> 
-        <Greeting>Hi! {props.userInfo.first_name}</Greeting>
-        
-        <Link
-          to="/"
-          onClick={() => {
-            localStorage.removeItem("token");
-            
-          }}
-        >
-          <BlueBtn>Log Out</BlueBtn>
-        </Link>
-      
-      </Info>
-       ):<div></div>}  
+      {showGreeting ? (
+        <Info>
+          <Greeting>Hi! {userInfo.first_name}</Greeting>
+
+          <Link
+            to="/"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("userName")
+              setShowGreeting(false);
+            }}
+          >
+            <BlueBtn>Log Out</BlueBtn>
+          </Link>
+        </Info>
+      ) : (
+        <div></div>
+      )}
     </Div>
   );
 };

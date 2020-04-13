@@ -119,7 +119,7 @@ const Register = (props) => {
                 </Option>
               );
             })}
-            <Option value="School Staff">Add School</Option>
+            <Option value="School Staff">Add Schools</Option>
           </Select>
         )}
         {

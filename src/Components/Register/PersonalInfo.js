@@ -23,15 +23,14 @@ const InnerDiv = styled.div`
 
   @media screen and (min-width: 1200px) {
     padding: 0;
-    height: 80vh;
+    height: 70vh;
     flex-basis: 40vw;
     background-color: white;
     border: 1px solid grey;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    padding: 0 50px;
     border-radius: 0 10px 10px 0;
   }
 `;
@@ -39,7 +38,7 @@ const InnerDiv = styled.div`
 const Image = styled.img`
   max-width: 100%;
   display: block;
-  height: 80vh;
+  height: 70vh;
   width: 38.2%;
   border-radius: 10px 0 0 10px;
   object-fit: cover;
@@ -72,8 +71,7 @@ const ErrorMessageBox = styled.div`
 `;
 
 const StyledTitle = styled.h1`
-  font-size: 30px ;
-  margin-bottom: 1rem;
+  font-size: 2rem ;
 
   @media screen and (min-width: 1200px) {
       font-size: 38px ;

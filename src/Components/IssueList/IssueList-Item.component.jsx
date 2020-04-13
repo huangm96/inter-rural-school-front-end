@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import styles from "./IssueList-Item.module.less";
 import { deleteIssue } from "../../store/actions";
 import { showDeleteConfirm } from "../../utils/utils";
+import moment from "moment";
 
 function IssuesListItem(props) {
   let iconType = "";
-  //console.log('issuelistitem', props)
+  console.log('issuelistitem', props)
   // set the correct status icon
   switch (props.data.status) {
     case "Needs Attention":
@@ -41,7 +42,7 @@ function IssuesListItem(props) {
         }}
         className={styles["issues--item--first-col"]}
       >
-        <p>{props.data.date}</p>
+        <p>{moment(props.data.date).format('L')}</p>
       </Col>
       <Col
         xs={{
