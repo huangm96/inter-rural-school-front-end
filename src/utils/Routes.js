@@ -5,8 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import Login from "../Components/Login";
 import Header from "../Components/Header";
 import Register from "../Components/Register/Register";
-import SchoolStaffRegister from "../Components/Register/SchoolStaffRegister";
-import BoardMemberRegister from "../Components/Register/BoardMemberRegister";
+import PersonalInfo from "../Components/Register/PersonalInfo";
 
 import Dashboard from "../Components/dashboard/dashboard.component";
 
@@ -21,14 +20,10 @@ const Routes = () => {
       <Route exact path="/new_user" component={Register} />
       <Route
         exact
-        path="/new_user/school_staff"
-        component={SchoolStaffRegister}
+        path="/new_user/personalInfo"
+        component={PersonalInfo}
       />
-      <Route
-        exact
-        path="/new_user/board_member"
-        component={BoardMemberRegister}
-      />
+
       <PrivateRoute exact path="/dashboard" component={Dashboard} />
      
       

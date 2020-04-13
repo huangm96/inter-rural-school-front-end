@@ -5,6 +5,9 @@ import {
   LOGIN_START,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  GET_SCHOOLS_START,
+  GET_SCHOOLS_SUCCESS,
+  GET_SCHOOLS_FAILURE, 
   SAVE_ISSUE,
   // FETCHING_ISSUES_START,
   // FETCHING_ISSUES_SUCCESS,
@@ -26,7 +29,8 @@ export const initialState = {
   getErrorMessageRegister: false,
   userInfo: {},
   issues: [],
-  comments: []
+  comments: [],
+  schools:[]
 };
 
 function rootReducer(state = initialState, action) {
@@ -34,28 +38,28 @@ function rootReducer(state = initialState, action) {
     case REGISTER_START:
       return {
         ...state,
-        registerIsLoading:true,
-        getErrorMessageRegister: false
+        registerIsLoading: true,
+        getErrorMessageRegister: false,
       };
     case REGISTER_SUCCESS:
       return {
         ...state,
-        registerIsLoading:false,
+        registerIsLoading: false,
       };
     case REGISTER_FAILURE:
       return {
         ...state,
-        getErrorMessageRegister: true
+        getErrorMessageRegister: true,
       };
     case LOGIN_START:
       return {
         ...state,
         getErrorMessageLogin: false,
         isLogined: false,
-        loginIsLoading:true,
+        loginIsLoading: true,
       };
     case LOGIN_SUCCESS:
-      console.log("user information: ",action.payload);
+      console.log("user information: ", action.payload);
       return {
         ...state,
         isLogined: true,
@@ -68,20 +72,35 @@ function rootReducer(state = initialState, action) {
           isBoardMember: action.payload.isBoardMember,
           last_name: action.payload.last_name,
           school: "Country School",
-          school_id: 10
+          school_id: 10,
         },
-        loginIsLoading:false,
+        loginIsLoading: false,
       };
     case LOGIN_FAILURE:
       return {
         ...state,
-        getErrorMessageLogin: true
+        getErrorMessageLogin: true,
       };
-
+    case GET_SCHOOLS_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case GET_SCHOOLS_SUCCESS:
+      return {
+        ...state,
+        isFetching:false,
+        schools:action.payload
+      };
+    case GET_SCHOOLS_FAILURE:
+      return {
+        ...state,
+        isFetching:false
+      };
     case SAVE_ISSUE:
       return {
         ...state,
-        issues: [...state.issues, action.payload]
+        issues: [...state.issues, action.payload],
       };
     // case FETCHING_ISSUES_START:
     //   return {
@@ -97,25 +116,23 @@ function rootReducer(state = initialState, action) {
     case FETCHING_COMMENTS_START:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       };
     case FETCHING_COMMENTS_SUCCESS:
       return {
         ...state,
         comments: [...state.comments, action.payload],
-        isFetching: false
+        isFetching: false,
       };
-case SAVING_COMMENTS_START:
+    case SAVING_COMMENTS_START:
       return {
         ...state,
-        
       };
     case SAVING_COMMENTS_SUCCESS:
-      console.log(action.payload)
+      console.log(action.payload);
       return {
         ...state,
         comments: [...state.comments, action.payload],
-        
       };
     default:
       return state;
