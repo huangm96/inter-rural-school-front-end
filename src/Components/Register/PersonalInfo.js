@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input, Icon, Form } from "antd";
+import { Button, Input, Icon, Form,  } from "antd";
 import styled from "styled-components";
 import { withFormik } from "formik";
 
@@ -82,20 +82,23 @@ const StyledTitle = styled.h1`
 
 
 const C = props => {
+// console.log(props.location.state)
   const {
     values,
     handleChange,
     handleBlur,
     handleSubmit,
     touched,
-    errors
+    errors,
   } = props;
   return (
     <Container>
       <Image src="/images/rsz_school.jpg" alt="School" />
       <InnerDiv>
-        <StyledTitle>Register as School Staff</StyledTitle>
+        <StyledTitle>Register</StyledTitle>
+
         <form onSubmit={handleSubmit}>
+
           <Form.Item
             help={touched.name && errors.name ? errors.name : ""}
             validateStatus={touched.name && errors.name ? "error" : undefined}
@@ -173,10 +176,10 @@ const C = props => {
             />
           </Form.Item>
 
-          {/* <Form.Item
-            help={touched.password2 && errors.password2 ? errors.password2 : ''}
+          <Form.Item
+            help={touched.password2 && errors.password2 ? errors.password2 : ""}
             validateStatus={
-              touched.password2 && errors.password2 ? 'error' : undefined
+              touched.password2 && errors.password2 ? "error" : undefined
             }
           >
             <Input.Password
@@ -186,20 +189,23 @@ const C = props => {
               value={values.password2}
               onBlur={handleBlur}
               onChange={handleChange}
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
             />
-          </Form.Item> */}
+          </Form.Item>
 
           <BlueBtn type="primary" htmlType="submit">
             Register
           </BlueBtn>
-           {props.isLoading && !props.getErrorMessage? (<p>isLoading........</p>):null}
+          {props.isLoading && !props.getErrorMessage ? (
+            <p>isLoading........</p>
+          ) : null}
           <ErrorMessageBox>
             {props.getErrorMessage ? (
               <p>Error! Please check your infomation!</p>
             ) : null}
           </ErrorMessageBox>
         </form>
+
       </InnerDiv>
     </Container>
   );
@@ -222,28 +228,34 @@ const validationSchema = yup.object().shape({
   password: yup
     .string()
     .required("Please provide a password")
-    .min(8, "Password too short")
-  // password2: yup
-  //   .string()
-  //   .required('Confirm password')
-  //   .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .min(8, "Password too short"),
+  password2: yup
+    .string()
+    .required("Confirm password")
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
-const SchoolStaffRegister = withFormik({
+const PersonalInfo = withFormik({
   mapPropsToValues: () => ({
     first_name: "",
     last_name: "",
     password: "",
     email: "",
     username: "",
-    isBoardMember: 0
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    if (props.location.state.school_id === 0) {
+      values.isBoardMember = true;
+    } else {
+      values.isBoardMember = false;
+      values.school_id = props.location.state.school_id;
+    }
+
     // console.log(values);
 
     props.getRegister(values, props);
     setSubmitting(false);
   },
-  validationSchema: validationSchema
+  validationSchema: validationSchema,
 })(C);
 
 const mapStateToProps = state => {
@@ -255,4 +267,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { getRegister }
-)(SchoolStaffRegister);
+)(PersonalInfo);

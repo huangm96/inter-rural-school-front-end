@@ -7,6 +7,8 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import rootReducer , { initialState } from './store/reducer';
+import { createLogger } from "redux-logger";
+const logger = createLogger();
 
 // const middleWare = [ thunk ]
 
@@ -21,7 +23,7 @@ import rootReducer , { initialState } from './store/reducer';
 //   )
 // )
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, applyMiddleware(thunk,logger));
 
 ReactDOM.render(
   <Router>

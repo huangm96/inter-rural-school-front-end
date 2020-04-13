@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "antd";
+import { Button, Select } from "antd";
+import { getSchools } from "../../store/actions";
 
 const Container = styled.div`
   background-color: #c5dcd9;
@@ -14,16 +15,14 @@ const Container = styled.div`
 `;
 
 const InnerDiv = styled.div`
-  
   height: 70vh;
   flex-basis: 40vw;
   background-color: white;
   border: 1px solid grey;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  padding: 250px 50px;
   border-radius: 0 10px 10px 0;
   @media (max-width: 1200px) {
     flex-basis: 100%;
@@ -45,47 +44,104 @@ const Image = styled.img`
 `;
 
 const BlueBtn = styled(Button)`
-    background-color: #6FA0D0;
-    border-radius: 10px;
-    color: #fff;
-    border: 2px solid #6FA0D0 !important;
-    transition: background-color 0.5s;
-    font-family: "Open Sans", sans-serif;
+  background-color: #6fa0d0;
+  border-radius: 10px;
+  color: #fff;
+  border: 2px solid #6fa0d0 !important;
+  transition: background-color 0.5s;
+  font-family: "Open Sans", sans-serif;
 
-    &:hover{
-      background-color: #fff;
-      color:  #6FA0D0;
-    }
+  &:hover {
+    background-color: #fff;
+    color: #6fa0d0;
+  }
 
-    &:focus{
-      background-color: #fff;
-      color: #6FA0D0;
-    }
-    @media (max-width: 1200px) {
+  &:focus {
+    background-color: #fff;
+    color: #6fa0d0;
+  }
+  @media (max-width: 1200px) {
     margin: 15px 0;
   }
 `;
+const { Option } = Select;
 
-const Register = () => {
+const Register = (props) => {
+  const { schools, getSchools } = props;
+  const [isBoardMember, setIsBoardMember] = useState(null);
+  const [schoolid, setSchoolID] = useState(0);
+  const [showButton, setShowButton]=useState(false)
+  useEffect(() => {
+    getSchools();
+    if (isBoardMember === true) {
+      setShowButton(true)
+    } else if (isBoardMember === false && schoolid !== 0) {
+      setShowButton(true)
+    } else {
+      setShowButton(false)
+    }
+  }, [getSchools,isBoardMember,schoolid]);
   return (
     <Container>
       <Image src="/images/rsz_school.jpg" alt="School" />
       <InnerDiv>
+        {/* select user type */}
+        <Select
+          style={{ width: "80%" }}
+          showSearch
+          placeholder="Select your user type"
+          onChange={(value) => {
+            if (value === "Board Member") {
+              setIsBoardMember(true);
+              setSchoolID(0);
+            } else {
+              setIsBoardMember(false);
+            }
+          }}
+        >
+          <Option value="Board Member">Board Member</Option>
+          <Option value="School Staff">School Staff</Option>
+        </Select>
+        {/* select school */}
+        {isBoardMember === null || isBoardMember === true ? null : (
+          <Select
+            style={{ width: "80%", marginTop: "20px" }}
+            showSearch
+            placeholder="Select your school"
+            onChange={(value) => {
+              setSchoolID(value);
+            }}
+          >
+            {schools.map((s) => {
+              return (
+                <Option key={s.id} value={s.id}>
+                  {s.school_name}
+                </Option>
+              );
+            })}
+            <Option value="School Staff">Add School</Option>
+          </Select>
+        )}
+        {
+          showButton?(<div style={{ marginTop: "20px" }}>
+          <Link
+            to={{
+              pathname: "/new_user/personalInfo",
+              state: {
+                school_id: schoolid,
+                isBoardMember: isBoardMember,
+              },
+            }}
+          >
+            <BlueBtn htmlType="submit">Next</BlueBtn>
+          </Link>
+        </div>):null
+}
         
-        <Link to="/new_user/school_staff">
-          <BlueBtn type="primary" htmlType="submit">
-            School Staff Member
-          </BlueBtn>
-        </Link>
-        <Link to="/new_user/board_member">
-          <BlueBtn type="primary" htmlType="submit">
-            Board Member
-          </BlueBtn>
-        </Link>
-        <div>
+        <div style={{ display: "flex", justifyContent: "center",marginTop:10 }}>
           <p>Already registered? </p>
           <Link to="/login">
-            <BlueBtn htmlType="submit">Login here!</BlueBtn>
+            <span style={{ margin: "0 5px" }}>Login here!</span>{" "}
           </Link>
         </div>
       </InnerDiv>
@@ -93,10 +149,7 @@ const Register = () => {
   );
 };
 
-const mapStateToProps = state => {
-  return {};
+const mapStateToProps = (state) => {
+  return { schools: state.schools };
 };
-export default connect(
-  mapStateToProps,
-  {}
-)(Register);
+export default connect(mapStateToProps, { getSchools })(Register);

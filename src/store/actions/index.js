@@ -5,10 +5,10 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const getRegister = (info, props) => dispatch => {
-  //console.log(info);
+  console.log(info);
   dispatch({ type: REGISTER_START });
   axiosWithAuth()
-    .post("/register", info)
+    .post("auth/register", info)
     .then(res => {
       console.log("Register action: ",res);
       dispatch({ type: REGISTER_SUCCESS });
@@ -28,7 +28,7 @@ export const getLogin = (info, props) => dispatch => {
   //console.log(info);
   dispatch({ type: LOGIN_START });
   axiosWithAuth()
-    .post("/login", info)
+    .post("/auth/login", info)
     .then(res => {
       console.log("Login action: ",res);
       dispatch({ type: LOGIN_SUCCESS, payload: res.data.user });
@@ -40,7 +40,23 @@ export const getLogin = (info, props) => dispatch => {
       dispatch({ type: LOGIN_FAILURE });
     });
 };
+export const GET_SCHOOLS_START = "GET_SCHOOLS_START";
+export const GET_SCHOOLS_SUCCESS = "GET_SCHOOLS_SUCCESS";
+export const GET_SCHOOLS_FAILURE = "GET_SCHOOLS_FAILURE";
 
+export const getSchools = () => (dispatch) => {
+  dispatch({ type: GET_SCHOOLS_START });
+  axiosWithAuth()
+    .get("schools")
+    .then((res) => {
+      dispatch({ type: GET_SCHOOLS_SUCCESS, payload: res.data });
+      
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({ type: GET_SCHOOLS_FAILURE });
+    });
+};
 export const SAVE_ISSUE = "SAVE_ISSUE";
 
 export const saveIssue = (info, props) => dispatch => {
