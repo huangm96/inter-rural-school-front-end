@@ -70,7 +70,6 @@ const Header = (props) => {
       <BigTitle>International Rural School</BigTitle>
       {showButton ? (
         <Info>
-          <p>{localStorage.getItem("userType")}</p>
           <Link
             to="/"
             onClick={() => {

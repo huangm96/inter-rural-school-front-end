@@ -4,54 +4,72 @@ import { connect } from 'react-redux';
 import styles from './IssueList.module.less'
 
 import IssueListItem from './IssueList-Item.component'
-import { NONAME } from 'dns';
 
 
 function IssueList(props) {
 
   let showIssues = (props.winWidth >= 1200 || props.issueType === 'clear')? { display: 'flex' } : { display : 'none'} ;
-  
+    let isBM = false;
+    if (localStorage.getItem("userType") === "Board Member") {
+      isBM = true;
+    }
   return (
-    <div 
-      className={styles['issues--container']} 
-      style={ showIssues }
-      >
-      <div className={styles['issues--header']}>
-        <p style={{ margin: 0 }}>{props.userData.school}</p>
+    <div className={styles["issues--container"]} style={showIssues}>
+      <div className={styles["issues--header"]}>
+        {isBM ? (
+          <p style={{ margin: 0 }}>
+            Board Member: {localStorage.getItem("userName")}
+          </p>
+        ) : (
+          <p style={{ margin: 0 }}>
+            School Staff: {localStorage.getItem("userName")}
+          </p>
+        )}
 
-        { !props.userInfo.isBoardMember && <button 
-           onClick={ () =>  props.Set_IssueType( 'createnew') }
-           className={styles['issues--header--btn']}>New Issue
-        </button> }
-
+        {!isBM && (
+          <button
+            onClick={() => props.Set_IssueType("createnew")}
+            className={styles["issues--header--btn"]}
+          >
+            New Issue
+          </button>
+        )}
       </div>
-      <Row className={styles['issues--col-names']}>
-        <Col xl={5}>Date Created</Col>
-        <Col xl={6}>Title</Col>
-        <Col xl={5}>Status</Col>
+      <Row className={styles["issues--col-names"]}>
+        <Col xl={4} style={{ textAlign: "left" }}>
+          Date Created
+        </Col>
+        <Col xl={6} style={{ textAlign: "left" }}>
+          Title
+        </Col>
+        <Col xl={5} style={{ textAlign: "left" }}>
+          Status
+        </Col>
         <Col xl={2}>View</Col>
-        { !props.userInfo.isBoardMember && <Col xl={2}>Delete</Col>}
+        {!isBM && <Col xl={2}>Delete</Col>}
       </Row>
 
-      {props.issueData &&
-        props.issueData.filter(issue => issue.status.includes(props.query)).map(issue => {
-          return (
-            <IssueListItem
-              {...props}
-              data={issue}
-              key={issue.id}
-              setIssue={ props.setIssue }
-              Set_IssueType={ props.Set_IssueType }
-            />
-          );
-        })}
+      {props.issueList &&
+        props.issueList
+          .filter((issue) => issue.status.includes(props.query))
+          .map((issue) => {
+            return (
+              <IssueListItem
+                {...props}
+                data={issue}
+                key={issue.id}
+                setIssue={props.setIssue}
+                Set_IssueType={props.Set_IssueType}
+              />
+            );
+          })}
     </div>
   );
 }
 const mapStateToProps = state => {
   
   return {
-    userInfo: state.userInfo,
+    issueList: state.issues,
   };
 };
 

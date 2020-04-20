@@ -30,74 +30,34 @@ function IssuesListItem(props) {
     default:
       iconType = "exclamation-circle";
   }
-
+  let isBM = false;
+  if (localStorage.getItem("userType") === "Board Member") {
+    isBM = true;
+  }
   return (
     <Row className={styles["issues--item--wrapper"]}>
-      <Col
-        xs={{
-          span: 24,
-        }}
-        xl={{
-          span: 5,
-        }}
+      <Col xs={{span: 24}} xl={{span: 5}}
         className={styles["issues--item--first-col"]}
       >
-        <p>{moment(props.data.date).format('L')}</p>
+        <p>{moment(props.data.date).format("L")}</p>
       </Col>
-      <Col
-        xs={{
-          span: 20,
-        }}
-        xl={{
-          span: 6,
-        }}
-      >
+      <Col xs={{span: 20}} xl={{span: 6}}>
         <p>{props.data.issue_title}</p>
       </Col>
-      <Col
-        xs={{
-          span: 5,
-        }}
-        xl={{
-          span: 0,
-        }}
-      >
+      <Col xs={{span: 5}} xl={{span: 0}}>
         <Icon type={iconType} style={{ fontSize: "2rem" }} />
       </Col>
-      <Col
-        xs={{
-          span: 0,
-        }}
-        xl={{
-          span: 5,
-        }}
-      >
+      <Col xs={{span: 0}} xl={{span: 5}}>
         <p> {props.data.status} </p>
       </Col>
 
       {/* spacer for BM dashboard */}
-      {props.userInfo.isBoardMember && (
-        <Col
-          xs={{
-            span: 8,
-          }}
-          xl={{
-            span: 0,
-          }}
-        >
+      {isBM && (<Col xs={{span: 8}} xl={{span: 0 }}>
           <div></div>
         </Col>
       )}
 
-      <Col
-        xs={{
-          span: 8,
-          offset: 3,
-        }}
-        xl={{
-          span: 0,
-        }}
-      >
+      <Col xs={{span: 8,offset: 3}} xl={{span: 0}}>
         <button
           id={props.data.id}
           align="middle"
@@ -107,15 +67,8 @@ function IssuesListItem(props) {
         </button>
       </Col>
 
-      {!props.userInfo.isBoardMember && (
-        <Col
-          xs={{
-            span: 8,
-          }}
-          xl={{
-            span: 0,
-          }}
-        >
+      {!isBM && (
+        <Col xs={{span: 8}} xl={{span: 0}}>
           <button
             id={props.data.id}
             onClick={() => {
@@ -132,14 +85,7 @@ function IssuesListItem(props) {
         </Col>
       )}
 
-      <Col
-        xs={{
-          span: 0,
-        }}
-        xl={{
-          span: 2,
-        }}
-      >
+      <Col  xs={{span: 0 }} xl={{span: 2}}>
         <Icon
           type="eye"
           id={props.data.id}
@@ -148,15 +94,8 @@ function IssuesListItem(props) {
         />
       </Col>
 
-      {!props.userData.isBoardMember && (
-        <Col
-          xs={{
-            span: 0,
-          }}
-          xl={{
-            span: 2,
-          }}
-        >
+      {!isBM && (
+        <Col xs={{span: 0}} xl={{span: 2}}>
           <Icon
             type="delete"
             id={props.data.id}
@@ -177,7 +116,6 @@ function IssuesListItem(props) {
 }
 const mapStateToProps = (state) => {
   return {
-    userInfo: state.userInfo,
   };
 };
 
