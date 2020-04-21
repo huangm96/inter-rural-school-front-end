@@ -36,13 +36,13 @@ function IssueList(props) {
         )}
       </div>
       <Row className={styles["issues--col-names"]}>
-        <Col xl={4} style={{ textAlign: "left" }}>
+        <Col xl={4} >
           Date Created
         </Col>
-        <Col xl={6} style={{ textAlign: "left" }}>
+        <Col xl={6} >
           Title
         </Col>
-        <Col xl={5} style={{ textAlign: "left" }}>
+        <Col xl={5}>
           Status
         </Col>
         <Col xl={2}>View</Col>
