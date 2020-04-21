@@ -37,7 +37,7 @@ function Dashboard(props) {
   }, [newIssues]);
   useEffect(() => {
     getCommentList();
-  }, []);
+  }, [newIssues]);
 
   function Set_IssueType(type) {
     /*
@@ -66,11 +66,6 @@ function Dashboard(props) {
   // used to show or hide IssueList and SingleIssue
   let windowSize = GetWindowSize();
 
-  // console.log('issues in Redux state: ',props.issues);
-  // console.log('Comments in Redux state: ',props.comments);
-  // console.log('User Info:', props.userInfo );
-  // console.log('currentIssue',currentIssue);
-  // console.log( 'issueType :', issueType);
 
   return (
     <LayoutWrapper>
@@ -83,9 +78,10 @@ function Dashboard(props) {
             issueType={issueType}
             setIssue={setIssue}
             query={query}
+            updateIssues={setNewIssues}
           />
           <SingleIssue
-            issue={currentIssue}
+            currentissue={currentIssue}
             winWidth={windowSize[0]}
             issueType={issueType}
             Set_IssueType={Set_IssueType}

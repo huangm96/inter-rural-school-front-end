@@ -1,9 +1,8 @@
-import React   from 'react'
+import React, {  useEffect } from "react";
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { connect } from 'react-redux'
 import { updateForm,getCommentById } from "../../store/actions";
-import { useEffect } from "react";
 
 import SingleIssueForm from './singleissue-form.component'
 
@@ -18,8 +17,6 @@ function SingleIssue( props ) {
   const SIT = props.Set_IssueType; 
   const updateIssues = props.updateIssues;
   let showSingle = (props.winWidth >= 1200 || props.issueType !== 'clear')? { display: 'flex' } : { display : 'none'} ;
-  // destructuring user data
-  console.log(props.issue)
 
   // destructuring user issue data
   let {
@@ -30,11 +27,9 @@ function SingleIssue( props ) {
     date,
     createdBy,
     school_name,
-    school_id,
     comment_id,
     location,
-    isBoardMember,
-  } = props.issue;
+  } = props.currentissue;
 
   // inital values for new issues
   let InitNewIssue = {
@@ -62,14 +57,17 @@ function SingleIssue( props ) {
     BMcomment:props.BMcomment.comment
   };
 
-  let initObject = ( issueType === 'edit' ) ? InitEdit : InitNewIssue;
+  
 
   // console.log( 'single-issue props.issue: ', props.issue);
   // console.log('issueType prop of singleIssue:', props.issueType);
-//  useEffect(() => {
+  useEffect(() => {
+    
+      props.getCommentById(comment_id);
    
-//  }, []);
-  console.log(props.commentsList)
+  }, [props.currentissue.comment_id]);
+  
+  let initObject = ( issueType === 'edit' ) ? InitEdit : InitNewIssue;
   return (
     // hide the single issue view on mobile until user clicks view or edit button
     <div className={styles["singleIssue--container"]} style={showSingle}>
@@ -106,7 +104,6 @@ function SingleIssue( props ) {
             issue_description: yup
               .string()
               .required("Please provide decription"),
-            BMcomment: yup.string().required("Please provide comment"),
           })}
           render={(props) => (
             <SingleIssueForm

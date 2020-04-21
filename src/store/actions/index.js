@@ -1,16 +1,15 @@
 import { axiosWithAuth } from "../../utils/axiosWithAuth";
-import axios from "axios";
 export const REGISTER_START = "REGISTER_START";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const getRegister = (info, props) => dispatch => {
-  console.log(info);
+  // console.log(info);
   dispatch({ type: REGISTER_START });
   axiosWithAuth()
-    .post("auth/register", info)
+    .post("/auth/register", info)
     .then(res => {
-      console.log("Register action: ",res);
+      // console.log("Register action: ",res);
       dispatch({ type: REGISTER_SUCCESS });
       props.history.push("/login");
     })
@@ -30,7 +29,7 @@ export const getLogin = (info, props) => dispatch => {
   axiosWithAuth()
     .post("/auth/login", info)
     .then(res => {
-      console.log("Login action: ",res);
+      // console.log("Login action: ",res);
       dispatch({ type: LOGIN_SUCCESS, payload: res.data.user });
       localStorage.setItem("token", res.data.token);
       if (res.data.user.isBoardMember) {
@@ -59,7 +58,7 @@ export const GET_SCHOOLS_FAILURE = "GET_SCHOOLS_FAILURE";
 export const getSchools = () => (dispatch) => {
   dispatch({ type: GET_SCHOOLS_START });
   axiosWithAuth()
-    .get("schools")
+    .get("/schools")
     .then((res) => {
       dispatch({ type: GET_SCHOOLS_SUCCESS, payload: res.data });
       
@@ -73,16 +72,14 @@ export const SAVE_ISSUE = "SAVE_ISSUE";
 
 export const saveIssue = (info, props) => dispatch => {
   
-  console.log("save issue: ", info);
+  // console.log("save issue: ", info);
   
   axiosWithAuth()
-    .post("issues/", info)
+    .post("/issues/", info)
     .then((res) => {
-      console.log("save issue action: ", res);
+      // console.log("save issue action: ", res);
       props.updateIssues(info);
-      //console.log(props);
-      //props.location.props.updateIssues(info);
-      //props.history.push("/dashboard");
+  
     })
     .catch((err) => {
       console.log(err);
@@ -132,9 +129,9 @@ export const FETCHING_COMMENTS_FAILURE = "FETCHING_COMMENTS_FAILURE";
 export const getCommentList = () => (dispatch) => {
   dispatch({ type: FETCHING_COMMENTS_START });
 axiosWithAuth()
-  .get("comments/")
+  .get("/comments/")
   .then((res) => {
-    console.log("comments  from server :", res);
+    // console.log("comments  from server :", res);
       dispatch({ type: FETCHING_COMMENTS_SUCCESS, payload: res.data });
   })
   .catch((err) => {
@@ -152,7 +149,7 @@ export const getCommentById = (id) => dispatch => {
   axiosWithAuth()
     .get(`/comments/${id}`)
     .then((res) => {
-      console.log("comments  from server :", res);
+      // console.log("comments  from server :", res);
 
       dispatch({ type: FETCHING_COMMENTBYID_SUCCESS, payload: res.data });
     })
@@ -165,12 +162,11 @@ export const getCommentById = (id) => dispatch => {
 
 
 export const updateForm = (id, data, props) => dispatch => {
-  // console.log("updateform :", id, data);
-//console.log( "updateform : props", props)
+
     axiosWithAuth()
-      .put(`issues/${id}`, data)
+      .put(`/issues/${id}`, data)
       .then((res) => {
-        console.log("updateform :", res);
+        // console.log("updateform :", res);
         props.updateIssues(data);
       })
       .catch((err) => {
@@ -179,18 +175,16 @@ export const updateForm = (id, data, props) => dispatch => {
 };
 
 export const deleteIssue = (id, props) => dispatch => {
-  //console.log(props);
-  axios
-    .delete(`https://internationalrsr.herokuapp.com/issues/${id}`)
-    .then(res => {
-      // console.log("Delete Issue action: ",res);
-      props.updateIssues({ id });
-      //dispatch({ type: DELETING_FRIENDS, payload: friend });
-      // props.history.push('/dashboard');
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    axiosWithAuth()
+      .delete(`/issues/${id}`)
+      .then((res) => {
+        // console.log("Delete Issue action: ",res);
+        props.updateIssues({ id });
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 };
 
 
@@ -199,17 +193,36 @@ export const SAVING_COMMENTS_SUCCESS = "SAVING_COMMENTS_SUCCESS";
 export const SAVING_COMMENTS_FAILURE = "SAVING_COMMENTS_FAILURE";
 
 export const saveComment = (data) => dispatch => {
-  console.log("comments saving from server :", data);
   dispatch({ type: SAVING_COMMENTS_START });
-  axios
-    .post("https://internationalrsr.herokuapp.com/comments/", data)
-    .then(res => {
-      console.log("comments saving action :", res);
-      
-        dispatch({ type: SAVING_COMMENTS_SUCCESS, payload: data });
-      
+  axiosWithAuth()
+    .post("/comments/", data)
+    .then((res) => {
+      // console.log("comments saving action :", res);
+
+      dispatch({ type: SAVING_COMMENTS_SUCCESS, payload: {id:res.data,data:data} });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
+    });
+};
+
+export const UPDATING_COMMENTS_START = "UPDATING_COMMENTS_START";
+export const UPDATING_COMMENTS_SUCCESS = "UPDATING_COMMENTS_SUCCESS";
+export const UPDATING_COMMENTS_FAILURE = "UPDATING_COMMENTS_FAILURE";
+
+export const updatingComment = (id,data) => (dispatch) => {
+  // console.log("comments updating from server :", data);
+    dispatch({ type: UPDATING_COMMENTS_START });
+
+  axiosWithAuth()
+    .put(`/comments/${id}`, data)
+    .then((res) => {
+      // console.log("comments updating action :", res);
+      dispatch({ type: UPDATING_COMMENTS_SUCCESS, payload: {id,data} });
+
+    })
+    .catch((err) => {
+      console.log(err);
+       dispatch({ type: UPDATING_COMMENTS_FAILURE });
     });
 };

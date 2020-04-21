@@ -23,7 +23,9 @@ import {
   FETCHING_COMMENTS_START,
   FETCHING_COMMENTS_SUCCESS,
   FETCHING_COMMENTS_FAILURE,
-  //FETCHING_COMMENTS_FAILURE,
+  UPDATING_COMMENTS_START,
+  UPDATING_COMMENTS_SUCCESS,
+  UPDATING_COMMENTS_FAILURE,
 } from "../actions";
 
 export const initialState = {
@@ -36,8 +38,8 @@ export const initialState = {
   userInfo: {},
   issues: [],
   comments: {},
-  commentsList:[],
-  schools:[]
+  commentsList: [],
+  schools: [],
 };
 
 function rootReducer(state = initialState, action) {
@@ -155,16 +157,23 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         isFetching: false,
+        comments: {},
       };
     case SAVING_COMMENTS_START:
       return {
         ...state,
       };
     case SAVING_COMMENTS_SUCCESS:
-      console.log(action.payload);
+
+
       return {
         ...state,
-        comments: [...state.comments, action.payload],
+        comments: {
+          id: action.payload.id,
+          comment: action.payload.data.comment,
+          board_id: action.payload.data.board_id,
+          issue_id: action.payload.data.issue_id,
+        },
       };
     case FETCHING_COMMENTS_START:
       return {
@@ -178,6 +187,25 @@ function rootReducer(state = initialState, action) {
         isFetching: false,
       };
     case FETCHING_COMMENTS_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case UPDATING_COMMENTS_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case UPDATING_COMMENTS_SUCCESS:
+      console.log(action.payload);
+      state.comments.comment = action.payload.data.comment;
+      state.comments.board_id = action.payload.data.board_id;
+
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case UPDATING_COMMENTS_FAILURE:
       return {
         ...state,
         isFetching: false,
