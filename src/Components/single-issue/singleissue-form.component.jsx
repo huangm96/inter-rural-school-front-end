@@ -6,6 +6,7 @@ import {
   saveIssue,
   deleteIssue,
   saveComment,
+  updatingComment,
 } from "../../store/actions";
 import { connect } from "react-redux";
 import styles from "./singleissue-form.module.less";
@@ -23,10 +24,8 @@ function Stat({ label, data }) {
 }
 
 function SingleIssueForm(props) {
-  console.log("SingleIssueForm props", props);
-
+  // console.log("SingleIssueForm props", props);
   let { values, handleChange } = props;
-
   let {
     id,
     createdBy,
@@ -35,21 +34,13 @@ function SingleIssueForm(props) {
     issue_description,
     status,
     comment_id,
-    BMcomment,
-    bmComment
   } = props.values;
 
-  // console.log('single issue form props', props);
   let isBM = false;
   if (localStorage.getItem("userType") === "Board Member") {
     isBM = true;
   }
-  var comment = props.values.props.commentsList.filter((c) => { 
-    return c.id === id
-  })
-  if(comment_id){
-  console.log(values.bmComment)
-  values.bmComment = comment[0].comment}
+
   
   return (
     <Form className={styles["singleIssue-form"]}>
@@ -100,7 +91,8 @@ function SingleIssueForm(props) {
           {isBM && <Stat label="Description: " data={issue_description} />}
 
           {/*issue comment for BM */}
-          {isBM && !comment_id && (
+
+          {isBM  && (
             <div className={styles.bmCommentDiv}>
               <label
                 htmlFor="BMcomment"
@@ -113,41 +105,17 @@ function SingleIssueForm(props) {
                 Board Comment:{" "}
               </label>
               <Input.TextArea
-                name="bmComment"
+                id="BMcomment"
+                name="BMcomment"
                 placeholder={"Board Member Comment"}
                 onChange={handleChange}
-                value={values.bmComment}
+                value={values.BMcomment}
                 autoSize={{
                   minRows: 2,
                   maxRows: 2,
                 }}
               />
-              <ErrorMessage component="p" name="bmComment" />
-            </div>
-          )}
-          {isBM && comment_id && (
-            <div className={styles.bmCommentDiv}>
-              <label
-                htmlFor="bmComment"
-                style={{
-                  textAlign: "left",
-                  display: "block",
-                  marginBottom: "1rem",
-                }}
-              >
-                Board Comment:{" "}
-              </label>
-              <Input.TextArea
-                name="bmComment"
-                placeholder={"Board Member Comment"}
-                onChange={handleChange}
-                value={values.bmComment}
-                autoSize={{
-                  minRows: 2,
-                  maxRows: 2,
-                }}
-              />
-              <ErrorMessage component="p" name="bmComment" />
+              <ErrorMessage component="p" name="BMcomment" />
             </div>
           )}
           {/* issue title for SS */}
@@ -201,7 +169,7 @@ function SingleIssueForm(props) {
             </div>
           )}
           {/* issue comment for SS */}
-          {!isBM && <Stat label="Comment: " data={BMcomment} />}
+          {!isBM && <Stat label="Comment: " data={values.bmComment} />}
           {/* {(!isBM && currentIssue.boardComment) &&<Stat label='Board Comment: ' data={ currentIssue.boardComment }/> } */}
         </Col>
       </Row>
@@ -244,7 +212,7 @@ function SingleIssueForm(props) {
 
         {/* submit button for BM- updating the issue_status and comment*/}
 
-        {isBM && !comment_id && (
+        {isBM && (
           <button
             type="submit"
             onClick={() => {
@@ -252,42 +220,24 @@ function SingleIssueForm(props) {
                 id: id,
                 status: status,
               };
-              const comment = {
-                comment: bmComment,
-                issue_id: id,
-                board_id: localStorage.getItem("board_id"),
-              };
 
               props.updateForm(id, issueInfo, props);
-
-              props.saveComment(comment);
+              if (comment_id) {
+                props.updatingComment(comment_id, {
+                  comment: values.BMcomment,
+                  board_id: localStorage.getItem("board_id"),
+                });
+              } else {
+                props.saveComment({
+                  comment: values.BMcomment,
+                  issue_id: id,
+                  board_id: localStorage.getItem("board_id"),
+                });
+              }
               props.Set_IssueType("clear");
             }}
           >
             Submit
-          </button>
-        )}
-        {isBM && comment_id && (
-          <button
-            type="submit"
-            onClick={() => {
-              const issueInfo = {
-                id: id,
-                status: status,
-              };
-              const comment = {
-                comment: bmComment,
-                issue_id: id,
-                board_id: localStorage.getItem("board_id"),
-              };
-
-              props.updateForm(id, issueInfo, props);
-
-              props.saveComment(comment);
-              props.Set_IssueType("clear");
-            }}
-          >
-            Update
           </button>
         )}
 
@@ -333,7 +283,6 @@ function BMSelectStatus({ field, form, ...props }) {
 const mapStateToProps = (state) => {
   //console.log(state);
   return {
-    userInfo: state.userInfo,
     getErrorMessage: state.getErrorMessage,
   };
 };
@@ -343,4 +292,5 @@ export default connect(mapStateToProps, {
   saveIssue,
   deleteIssue,
   saveComment,
+  updatingComment,
 })(SingleIssueForm);
