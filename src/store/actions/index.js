@@ -4,7 +4,7 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const getRegister = (info, props) => dispatch => {
-  // console.log(info);
+  console.log(info);
   dispatch({ type: REGISTER_START });
   axiosWithAuth()
     .post("/auth/register", info)
@@ -34,7 +34,7 @@ export const getLogin = (info, props) => dispatch => {
       localStorage.setItem("token", res.data.token);
       if (res.data.user.isBoardMember) {
         localStorage.setItem("userType", "Board Member");
-        localStorage.setItem("board_id", res.data.user.board_id);
+        localStorage.setItem("board_id", res.data.user.id);
       } else {
         localStorage.setItem("userType", "School Staff");
         localStorage.setItem("school_id", res.data.user.school_id);
