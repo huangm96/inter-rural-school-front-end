@@ -92,7 +92,7 @@ function SingleIssueForm(props) {
 
           {/*issue comment for BM */}
 
-          {isBM  && (
+          {isBM && (
             <div className={styles.bmCommentDiv}>
               <label
                 htmlFor="BMcomment"
@@ -169,7 +169,7 @@ function SingleIssueForm(props) {
             </div>
           )}
           {/* issue comment for SS */}
-          {!isBM && <Stat label="Comment: " data={values.bmComment} />}
+          {!isBM && <Stat label="Comment: " data={values.BMcomment} />}
           {/* {(!isBM && currentIssue.boardComment) &&<Stat label='Board Comment: ' data={ currentIssue.boardComment }/> } */}
         </Col>
       </Row>
