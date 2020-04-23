@@ -8,6 +8,9 @@ import {
   GET_SCHOOLS_START,
   GET_SCHOOLS_SUCCESS,
   GET_SCHOOLS_FAILURE,
+  SAVING_SCHOOLS_START,
+  SAVING_SCHOOLS_SUCCESS,
+  SAVING_SCHOOLS_FAILURE,
   SAVE_ISSUE,
   FETCHING_ALLISSUES_START,
   FETCHING_ALLISSUES_SUCCESS,
@@ -105,6 +108,22 @@ function rootReducer(state = initialState, action) {
         ...state,
         isFetching: false,
       };
+    case SAVING_SCHOOLS_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case SAVING_SCHOOLS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        schools: [...state.schools,action.payload],
+      };
+    case SAVING_SCHOOLS_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+      };
     case SAVE_ISSUE:
       return {
         ...state,
@@ -164,8 +183,6 @@ function rootReducer(state = initialState, action) {
         ...state,
       };
     case SAVING_COMMENTS_SUCCESS:
-
-
       return {
         ...state,
         comments: {
