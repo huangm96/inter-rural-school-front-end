@@ -68,6 +68,24 @@ export const getSchools = () => (dispatch) => {
       dispatch({ type: GET_SCHOOLS_FAILURE });
     });
 };
+export const SAVING_SCHOOLS_START = "SAVING_SCHOOLS_START";
+export const SAVING_SCHOOLS_SUCCESS = "SAVING_SCHOOLS_SUCCESS";
+export const SAVING_SCHOOLS_FAILURE = "SAVING_SCHOOLS_FAILURE";
+
+export const savingSchools = (info) => (dispatch) => {
+  dispatch({ type: SAVING_SCHOOLS_START });
+  console.log(info)
+  axiosWithAuth()
+    .post("/schools",info)
+    .then((res) => {
+      dispatch({ type: SAVING_SCHOOLS_SUCCESS, payload: res.data });
+      console.log(res.data)
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({ type: SAVING_SCHOOLS_FAILURE });
+    });
+};
 export const SAVE_ISSUE = "SAVE_ISSUE";
 
 export const saveIssue = (info, props) => dispatch => {
@@ -226,3 +244,4 @@ export const updatingComment = (id,data) => (dispatch) => {
        dispatch({ type: UPDATING_COMMENTS_FAILURE });
     });
 };
+

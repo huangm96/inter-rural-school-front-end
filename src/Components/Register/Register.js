@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Select } from "antd";
 import { getSchools } from "../../store/actions";
-
+import AddSchoolsForm from "./AddSchoolsForm"
 const Container = styled.div`
   background-color: #c5dcd9;
   height: 100vh;
@@ -70,7 +70,8 @@ const Register = (props) => {
   const { schools, getSchools } = props;
   const [isBoardMember, setIsBoardMember] = useState(null);
   const [schoolid, setSchoolID] = useState(0);
-  const [showButton, setShowButton]=useState(false)
+  const [showButton, setShowButton] = useState(false)
+  const [showAddSchool, setShowAddSchool]= useState(false)
   useEffect(() => {
     getSchools();
     if (isBoardMember === true) {
@@ -80,7 +81,10 @@ const Register = (props) => {
     } else {
       setShowButton(false)
     }
-  }, [getSchools,isBoardMember,schoolid]);
+  }, [getSchools, isBoardMember, schoolid]);
+  const showAddSchoolTrigger = () => {
+    setShowAddSchool(!showAddSchool)
+  }
   return (
     <Container>
       <Image src="/images/rsz_school.jpg" alt="School" />
@@ -119,32 +123,37 @@ const Register = (props) => {
                 </Option>
               );
             })}
-            <Option value="School Staff">Add Schools</Option>
+            <Option value="add school" onClick={showAddSchoolTrigger}>
+              Add Schools
+            </Option>
           </Select>
         )}
-        {
-          showButton?(<div style={{ marginTop: "20px" }}>
-          <Link
-            to={{
-              pathname: "/new_user/personalInfo",
-              state: {
-                school_id: schoolid,
-                isBoardMember: isBoardMember,
-              },
-            }}
-          >
-            <BlueBtn htmlType="submit">Next</BlueBtn>
-          </Link>
-        </div>):null
-}
-        
-        <div style={{ display: "flex", justifyContent: "center",marginTop:10 }}>
+        {showButton ? (
+          <div style={{ marginTop: "20px" }}>
+            <Link
+              to={{
+                pathname: "/new_user/personalInfo",
+                state: {
+                  school_id: schoolid,
+                  isBoardMember: isBoardMember,
+                },
+              }}
+            >
+              <BlueBtn htmlType="submit">Next</BlueBtn>
+            </Link>
+          </div>
+        ) : null}
+
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
+        >
           <p>Already registered? </p>
           <Link to="/login">
             <span style={{ margin: "0 5px" }}>Login here!</span>{" "}
           </Link>
         </div>
       </InnerDiv>
+      {showAddSchool ? <AddSchoolsForm showAddSchoolTrigger={showAddSchoolTrigger}/> : null}
     </Container>
   );
 };
