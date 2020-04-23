@@ -77,6 +77,7 @@ const Header = (props) => {
               localStorage.removeItem("userType");
               localStorage.removeItem("school_id");
               localStorage.removeItem("userName");
+              localStorage.removeItem("board_id");
               setShowButton(false);
             }}
           >
