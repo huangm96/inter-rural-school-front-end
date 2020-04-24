@@ -41,18 +41,18 @@ function IssuesListItem(props) {
         xl={{ span: 5 }}
         className={styles["issues--item--first-col"]}
       >
-        <p style={{ textAlign: "center" }}>
+        <p >
           {moment(props.data.date).format("L")}
         </p>
       </Col>
       <Col xs={{ span: 20 }} xl={{ span: 6 }}>
-        <p style={{ textAlign: "center" }}>{props.data.issue_title}</p>
+        <p >{props.data.issue_title}</p>
       </Col>
       <Col xs={{ span: 5 }} xl={{ span: 0 }}>
         <Icon type={iconType} style={{ fontSize: "2rem" }} />
       </Col>
       <Col xs={{ span: 0 }} xl={{ span: 5 }}>
-        <p style={{ textAlign: "center" }}> {props.data.status} </p>
+        <p > {props.data.status} </p>
       </Col>
 
       {/* spacer for BM dashboard */}
